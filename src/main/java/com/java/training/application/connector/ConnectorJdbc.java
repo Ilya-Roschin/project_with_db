@@ -9,11 +9,11 @@ import java.sql.Statement;
 
 public class ConnectorJdbc {
 
-    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static final String DATABASE_URL = "jdbc:mysql://localhost:3306/javashema";
-    static final String USER = "root";
-    static final String PASSWORD = "Password_123386_";
-    final static Logger logger = Logger.getLogger(ConnectorJdbc.class);
+    private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+    private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/javashema";
+    private static final String USER = "root";
+    private static final String PASSWORD = "Password_123386_";
+    private static final Logger logger = Logger.getLogger(ConnectorJdbc.class);
 
     public Statement connectDataBase() throws ClassNotFoundException, SQLException {
 

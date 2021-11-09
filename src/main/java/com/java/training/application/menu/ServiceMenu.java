@@ -9,7 +9,6 @@ import com.java.training.application.userInput.impl.InputEmail;
 import com.java.training.application.userInput.impl.InputPhoneNumbers;
 import com.java.training.application.userInput.impl.InputRole;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;

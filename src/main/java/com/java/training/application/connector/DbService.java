@@ -3,15 +3,16 @@ package com.java.training.application.connector;
 import com.java.training.application.model.User;
 import org.apache.log4j.Logger;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DBService {
+public class DbService {
 
-    final static Logger logger = Logger.getLogger(ConnectorJdbc.class);
+    private final static Logger logger = Logger.getLogger(ConnectorJdbc.class);
 
     public List<User> sqlSelect(Statement statement) throws SQLException {
         final String sql = "SELECT * FROM user";
