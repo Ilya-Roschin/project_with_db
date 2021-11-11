@@ -4,6 +4,7 @@ import com.java.training.application.connector.ConnectorJdbc;
 import com.java.training.application.connector.DbService;
 import com.java.training.application.model.User;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
@@ -26,19 +27,21 @@ public class UserService {
     }
 
     public List<User> findAllUsers() throws SQLException, ClassNotFoundException {
-        Statement statement = CONNECTOR_JDBC.connectDataBase();
-        return DB_SERVICE.sqlSelect(statement);
+
+        Connection connection = CONNECTOR_JDBC.connectDataBase();
+
+        return DB_SERVICE.sqlSelect(connection);
     }
 
     public void addUser(final User user) throws SQLException, ClassNotFoundException {
-        Statement statement = CONNECTOR_JDBC.connectDataBase();
-        DB_SERVICE.sqlInsert(statement, user);
+        Connection connection = CONNECTOR_JDBC.connectDataBase();
+        DB_SERVICE.sqlInsert(connection, user);
     }
 
     public void deleteUser(final long userId) throws SQLException, ClassNotFoundException {
         boolean deleted = false;
-        Statement statement = CONNECTOR_JDBC.connectDataBase();
-        DB_SERVICE.sqlDeleteById(statement, userId);
+        Connection connection = CONNECTOR_JDBC.connectDataBase();
+        DB_SERVICE.sqlDeleteById(connection, userId);
     }
 
     public Optional<User> findUserByName() throws SQLException, ClassNotFoundException {
