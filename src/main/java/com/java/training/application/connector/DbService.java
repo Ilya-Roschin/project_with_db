@@ -3,13 +3,17 @@ package com.java.training.application.connector;
 import com.java.training.application.model.User;
 import org.apache.log4j.Logger;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DbService {
 
-    private final static Logger logger = Logger.getLogger(ConnectorJdbc.class);
+    private final static Logger logger = Logger.getLogger(DbService.class);
 
     public List<User> sqlSelect(Connection connection) throws SQLException {
         final String sql = "SELECT * FROM user";
@@ -32,8 +36,6 @@ public class DbService {
         resultSet.close();
         logger.info("Close statement...");
         statement.close();
-        logger.info("Close connection...");
-        connection.close();
         return users;
     }
 
@@ -47,8 +49,7 @@ public class DbService {
         logger.info("User " + "'" + id + "' deleted");
         logger.info("Close statement...");
         statement.close();
-        logger.info("Close connection...");
-        connection.close();
+
     }
 
     public void sqlInsert(Connection connection, User user) throws SQLException {
@@ -59,7 +60,6 @@ public class DbService {
         PreparedStatement statement = connection.prepareStatement(sql);
         logger.info("Executing statement...");
         statement.executeUpdate(sql);
-        logger.info("Close statement...");
         statement.close();
     }
 
