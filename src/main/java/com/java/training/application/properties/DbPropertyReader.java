@@ -1,17 +1,20 @@
 package com.java.training.application.properties;
+// TODO: 13.11.2021 1) добавить класс DbProperty
+// TODO: 13.11.2021 2) поля в lower case
+// TODO: 13.11.2021 3) sql.password ... вывеси в интерфейс Constant
+// TODO: 13.11.2021
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 public class DbPropertyReader {
 
-    private static String JDBC_DRIVER;
-    private static String DATABASE_URL;
-    private static String USER;
-    private static String PASSWORD;
+    private String JDBC_DRIVER;
+    private String DATABASE_URL;
+    private String USER;
+    private String PASSWORD;
 
     public DbPropertyReader() {
         readProperty();
@@ -25,10 +28,9 @@ public class DbPropertyReader {
             DATABASE_URL = properties.getProperty("sql.database.url");
             USER = properties.getProperty("sql.user");
             PASSWORD = properties.getProperty("sql.password");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+            // TODO: 13.11.2021 log.error
         }
     }
 

@@ -1,7 +1,7 @@
 package com.java.training.application.connector;
 
-
 import com.java.training.application.properties.DbPropertyReader;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,9 +11,11 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
 
+// TODO: 13.11.2021 auto increase 
+// TODO: 13.11.2021 не использовать synchronized
 public class ConnectionPool {
 
-
+    private final static Logger logger = Logger.getLogger(ConnectionPool.class);
     private static final DbPropertyReader DB_PROPERTY_READER = new DbPropertyReader();
     private static final String JDBC_DRIVER = DB_PROPERTY_READER.getJdbcDriver();
     private static final String databaseUrl = DB_PROPERTY_READER.getDatabaseUrl();
@@ -22,14 +24,15 @@ public class ConnectionPool {
     private static int maxPoolSize;
     private static int connNum = 0;
 
-    Stack<Connection> freePool = new Stack<>();
-    Set<Connection> occupiedPool = new HashSet<>();
+    private final Stack<Connection> freePool = new Stack<>(); // TODO: 13.11.2021 use arraydeque
+    private final Set<Connection> occupiedPool = new HashSet<>();
 
     public ConnectionPool(int maxSize) {
         this.maxPoolSize = maxSize;
     }
 
     public synchronized Connection getConnection() throws SQLException {
+        logger.info("Connections before get: " + (maxPoolSize - connNum));
         Connection connection = null;
         if (isFull()) {
             throw new SQLException("The connection pool is full.");
@@ -39,10 +42,12 @@ public class ConnectionPool {
             connection = createNewConnectionForPool();
         }
         connection = makeAvailable(connection);
+        logger.info("Connections after get: " + (maxPoolSize - connNum));
         return connection;
     }
 
     public synchronized void returnConnection(Connection connection) throws SQLException {
+        logger.info("Connections before return: " + (maxPoolSize - connNum));
         if (connection == null) {
             throw new NullPointerException();
         }
@@ -50,6 +55,7 @@ public class ConnectionPool {
             throw new SQLException("The connection is returned already or it isn't for this pool");
         }
         freePool.push(connection);
+        logger.info("Connections after return: " + (maxPoolSize - connNum));
     }
 
     private synchronized boolean isFull() {

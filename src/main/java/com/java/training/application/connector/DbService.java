@@ -1,5 +1,6 @@
 package com.java.training.application.connector;
 
+import com.java.training.application.maper.Mapper;
 import com.java.training.application.model.User;
 import org.apache.log4j.Logger;
 
@@ -14,6 +15,7 @@ import java.util.List;
 public class DbService {
 
     private final static Logger logger = Logger.getLogger(DbService.class);
+    private static final Mapper MAPPER = new Mapper();
 
     public List<User> sqlSelect(Connection connection) throws SQLException {
         final String sql = "SELECT * FROM user";
@@ -28,7 +30,7 @@ public class DbService {
 
         List<User> users = new ArrayList<>();
         while (resultSet.next()) {
-            User user = mapTableToUser(resultSet);
+            User user = MAPPER.mapTableToUser(resultSet);
             users.add(user);
         }
 
@@ -63,15 +65,4 @@ public class DbService {
         statement.close();
     }
 
-    private User mapTableToUser(ResultSet resultSet) throws SQLException {
-        long id = resultSet.getLong("id_user");
-        String userRole = resultSet.getString("user_role");
-        String firstName = resultSet.getString("first_name");
-        String lastName = resultSet.getString("last_name");
-        String email = resultSet.getString("email");
-        String phoneNumber = resultSet.getString("phone_number");
-        List<String> phoneList = new ArrayList<>();
-        phoneList.add(phoneNumber);
-        return new User(id, userRole, firstName, lastName, email, phoneList);
-    }
 }

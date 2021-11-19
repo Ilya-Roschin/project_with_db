@@ -11,6 +11,7 @@ import com.java.training.application.userInput.impl.InputRole;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -30,7 +31,7 @@ public class ServiceMenu {
         return instance;
     }
 
-    public void addUser() throws SQLException, ClassNotFoundException {
+    public void addUser() throws SQLException {// TODO: 13.11.2021 refactor
         final InputString roleInput = new InputRole();
         final String role = roleInput.inputString();
         String firstName = READER.readLine("");
@@ -40,24 +41,23 @@ public class ServiceMenu {
         final String email = emailInput.inputString();
         final InputList numbersInput = new InputPhoneNumbers();
         final List<String> numbers = numbersInput.inputList();
-        final User user = new User(role, firstName, lastName, email, numbers);
-        USER_SERVICE.addUser(user);
+        USER_SERVICE.addUser(new User(role, firstName, lastName, email, numbers));
     }
 
-    public void findUser() throws SQLException, ClassNotFoundException {
+    public void findUser() throws SQLException {
+        // TODO: 13.11.2021 refactor
         final String firstName = READER.readLine("Enter user name: ");
         final Optional<User> foundUser = USER_SERVICE.findUserByName();
         foundUser.ifPresent(System.out::println);
     }
 
-    public void deleteUser() throws SQLException, ClassNotFoundException {
+    public void deleteUser() throws SQLException {
         final long userId = READER.readLong("Enter user ID: ");
         USER_SERVICE.deleteUser(userId);
     }
 
-    public void findAllUsers() throws SQLException, ClassNotFoundException {
+    public void findAllUsers() throws SQLException {
         final List<User> foundUsers = USER_SERVICE.findAllUsers();
-        foundUsers.stream().collect(Collectors.groupingBy(User::getRole));
         if (!foundUsers.isEmpty()) {
             foundUsers.forEach(System.out::println);
         } else {

@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+// TODO: 13.11.2021 сделать синглтон через enum
 public class UserService {
 
     private static UserService instance;
@@ -33,7 +34,7 @@ public class UserService {
         Connection connection = CONNECTION_POOL.getConnection();
         List<User> users = DB_SERVICE.sqlSelect(connection);
         logger.info("Close connection...");
-        CONNECTION_POOL.returnConnection(connection);
+        //CONNECTION_POOL.returnConnection(connection);
         return users;
     }
 
@@ -54,6 +55,7 @@ public class UserService {
 
     public Optional<User> findUserByName() throws SQLException {
         return findAllUsers().stream().findFirst();
+        // TODO: 13.11.2021 remove
     }
 
 }

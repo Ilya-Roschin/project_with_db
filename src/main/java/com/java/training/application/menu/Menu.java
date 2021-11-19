@@ -1,6 +1,5 @@
 package com.java.training.application.menu;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -37,7 +36,7 @@ public class Menu {
         return scanner.nextInt();
     }
 
-    public void makeChoice(final int choice) throws IOException, SQLException, ClassNotFoundException {
+    public void makeChoice(final int choice) throws SQLException {
         switch (choice) {
             case 1:
                 APPLICATION_MENU.addUser();
