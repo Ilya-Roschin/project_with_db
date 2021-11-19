@@ -1,4 +1,4 @@
-package com.java.training.application.userInput.impl;
+package com.java.training.application.userInput.impl.user;
 
 import com.java.training.application.reader.Reader;
 import com.java.training.application.userInput.InputList;
@@ -8,7 +8,7 @@ import com.java.training.application.validator.impl.NumberValidator;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InputPhoneNumbers implements InputList {
+public class InputUserPhoneNumbers implements InputList {
 
     private static final Validator NUMBER_VALIDATOR = new NumberValidator();
     private static final Reader READER = Reader.getInstance();

@@ -5,20 +5,18 @@ import com.java.training.application.reader.Reader;
 import com.java.training.application.service.UserService;
 import com.java.training.application.userInput.InputList;
 import com.java.training.application.userInput.InputString;
-import com.java.training.application.userInput.impl.InputEmail;
-import com.java.training.application.userInput.impl.InputPhoneNumbers;
-import com.java.training.application.userInput.impl.InputRole;
+import com.java.training.application.userInput.impl.user.*;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class ServiceMenu {
 
     private static final Reader READER = Reader.getInstance();
-    private static final UserService USER_SERVICE = UserService.getInstance();
+    private static final UserService USER_SERVICE = UserService.INSTANCE;
+
+
     private static ServiceMenu instance;
 
     private ServiceMenu() {
@@ -32,16 +30,17 @@ public class ServiceMenu {
     }
 
     public void addUser() throws SQLException {// TODO: 13.11.2021 refactor
-        final InputString roleInput = new InputRole();
-        final String role = roleInput.inputString();
-        String firstName = READER.readLine("");
-        firstName = READER.readLine("input first name: ");
-        final String lastName = READER.readLine("input last name: ");
-        final InputString emailInput = new InputEmail();
-        final String email = emailInput.inputString();
-        final InputList numbersInput = new InputPhoneNumbers();
-        final List<String> numbers = numbersInput.inputList();
-        USER_SERVICE.addUser(new User(role, firstName, lastName, email, numbers));
+        final InputString roleInput = new InputUserRole();
+        final InputString firstNameInput = new InputUserFirstName();
+        final InputString lastNameInput = new InputUserLastName();
+        final InputString emailInput = new InputUserEmail();
+        final InputList numbersInput = new InputUserPhoneNumbers();
+
+        USER_SERVICE.addUser(new User(roleInput.inputString(),
+                firstNameInput.inputString(),
+                lastNameInput.inputString(),
+                emailInput.inputString(),
+                numbersInput.inputList()));
     }
 
     public void findUser() throws SQLException {

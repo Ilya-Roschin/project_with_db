@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Menu {
 
-    private static final ServiceMenu APPLICATION_MENU = ServiceMenu.getInstance();
+    private static final ServiceMenu SERVICE_MENU = ServiceMenu.getInstance();
 
     public static void run() {
         final Menu menu = new Menu();
@@ -24,10 +24,10 @@ public class Menu {
 
     public void printMenu() {
         System.out.println("Menu:");
-        System.out.println("1. add new user");
-        System.out.println("2. find user by user name");
-        System.out.println("3. delete user by user name");
-        System.out.println("4. find all users");
+        System.out.println("1. add new string to table");
+        System.out.println("2. find by name");
+        System.out.println("3. delete by name");
+        System.out.println("4. find all");
         System.out.println("0. exit");
     }
 
@@ -39,16 +39,16 @@ public class Menu {
     public void makeChoice(final int choice) throws SQLException {
         switch (choice) {
             case 1:
-                APPLICATION_MENU.addUser();
+                SERVICE_MENU.addUser();
                 break;
             case 2:
-                APPLICATION_MENU.findUser();
+                SERVICE_MENU.findUser();
                 break;
             case 3:
-                APPLICATION_MENU.deleteUser();
+                SERVICE_MENU.deleteUser();
                 break;
             case 4:
-                APPLICATION_MENU.findAllUsers();
+                SERVICE_MENU.findAllUsers();
                 break;
             case 0:
                 System.exit(0);

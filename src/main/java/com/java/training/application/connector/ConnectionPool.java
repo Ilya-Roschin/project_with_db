@@ -42,6 +42,7 @@ public class ConnectionPool {
             connection = createNewConnectionForPool();
         }
         connection = makeAvailable(connection);
+        autoChangeMaxPoolSize();
         logger.info("Connections after get: " + (maxPoolSize - connNum));
         return connection;
     }
@@ -55,6 +56,7 @@ public class ConnectionPool {
             throw new SQLException("The connection is returned already or it isn't for this pool");
         }
         freePool.push(connection);
+        autoChangeMaxPoolSize();
         logger.info("Connections after return: " + (maxPoolSize - connNum));
     }
 
@@ -107,4 +109,24 @@ public class ConnectionPool {
         }
     }
 
+    private boolean isCapacityNeedIncrease() {
+        return (double) connNum / maxPoolSize >= 0.8 && maxPoolSize < 29;
+    }
+
+    private boolean isCapacityNeeDecrease() {
+        return (double) connNum / maxPoolSize <= 0.5 && maxPoolSize >= 12;
+    }
+
+    private void autoChangeMaxPoolSize() {
+        if (isCapacityNeedIncrease()) {
+            logger.info("Increase maxPoolSize...");
+            maxPoolSize += 3;
+        }
+
+        if (isCapacityNeeDecrease()) {
+            logger.info("Decrease maxPoolSize...");
+            maxPoolSize += 3;
+        }
+
+    }
 }

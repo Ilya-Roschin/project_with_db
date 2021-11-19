@@ -1,6 +1,6 @@
 package com.java.training.application.connector;
 
-import com.java.training.application.maper.Mapper;
+import com.java.training.application.maper.impl.UserMapper;
 import com.java.training.application.model.User;
 import org.apache.log4j.Logger;
 
@@ -15,7 +15,7 @@ import java.util.List;
 public class DbService {
 
     private final static Logger logger = Logger.getLogger(DbService.class);
-    private static final Mapper MAPPER = new Mapper();
+    private static final UserMapper MAPPER = new UserMapper();
 
     public List<User> sqlSelect(Connection connection) throws SQLException {
         final String sql = "SELECT * FROM user";
@@ -45,13 +45,11 @@ public class DbService {
         final String sql = "DELETE FROM user WHERE id_user = " + id;
         PreparedStatement statement = connection.prepareStatement(sql);
         logger.info("Executing statement...");
-
         logger.info("Delete user from database...");
         statement.executeUpdate(sql);
         logger.info("User " + "'" + id + "' deleted");
         logger.info("Close statement...");
         statement.close();
-
     }
 
     public void sqlInsert(Connection connection, User user) throws SQLException {

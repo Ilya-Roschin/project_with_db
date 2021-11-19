@@ -11,30 +11,18 @@ import java.util.List;
 import java.util.Optional;
 
 // TODO: 13.11.2021 сделать синглтон через enum
-public class UserService {
+public enum UserService {
 
-    private static UserService instance;
-
+    INSTANCE;
     private static final DbService DB_SERVICE = new DbService();
-    private static final ConnectionPool CONNECTION_POOL = new ConnectionPool(5);
+    private static final ConnectionPool CONNECTION_POOL = new ConnectionPool(8);
     private final static Logger logger = Logger.getLogger(DbService.class);
 
-    private UserService() {
-    }
-
-    public static UserService getInstance() {
-        if (instance == null) {
-            instance = new UserService();
-        }
-        return instance;
-    }
-
     public List<User> findAllUsers() throws SQLException {
-
         Connection connection = CONNECTION_POOL.getConnection();
         List<User> users = DB_SERVICE.sqlSelect(connection);
         logger.info("Close connection...");
-        //CONNECTION_POOL.returnConnection(connection);
+        CONNECTION_POOL.returnConnection(connection);
         return users;
     }
 

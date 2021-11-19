@@ -1,11 +1,11 @@
-package com.java.training.application.userInput.impl;
+package com.java.training.application.userInput.impl.user;
 
 import com.java.training.application.reader.Reader;
 import com.java.training.application.userInput.InputString;
 import com.java.training.application.validator.Validator;
 import com.java.training.application.validator.impl.EmailValidator;
 
-public class InputEmail implements InputString {
+public class InputUserEmail implements InputString {
 
     private static final Validator EMAIL_VALIDATOR = new EmailValidator();
     private static final Reader READER = Reader.getInstance();
