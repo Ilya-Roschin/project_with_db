@@ -11,10 +11,9 @@ public class Menu {
         final Menu menu = new Menu();
         try {
             while (true) {
-
-                menu.printMenu();
+                menu.printMainMenu();
                 final int choice = menu.readMenu();
-                menu.makeChoice(choice);
+                menu.makeChoiceOfOperation(choice);
 
             }
         } catch (final Exception e) {
@@ -22,7 +21,7 @@ public class Menu {
         }
     }
 
-    public void printMenu() {
+    public void printMainMenu() {
         System.out.println("Menu:");
         System.out.println("1. add new string to table");
         System.out.println("2. find by name");
@@ -31,24 +30,33 @@ public class Menu {
         System.out.println("0. exit");
     }
 
+    public void printTableMenu() {
+        System.out.println("Choose table:");
+        System.out.println("1. user");
+        System.out.println("2. car");
+        System.out.println("0. exit");
+    }
+
     public int readMenu() {
         final Scanner scanner = new Scanner(System.in);
         return scanner.nextInt();
     }
 
-    public void makeChoice(final int choice) throws SQLException {
+    public void makeChoiceOfOperation(final int choice) throws SQLException {
+        printTableMenu();
+        final int choiceTable = readMenu();
         switch (choice) {
             case 1:
-                SERVICE_MENU.addUser();
+                chooseAddMethod(choiceTable);
                 break;
             case 2:
-                SERVICE_MENU.findUser();
+                chooseFindMethod(choiceTable);
                 break;
             case 3:
-                SERVICE_MENU.deleteUser();
+                chooseDeleteMethod(choiceTable);
                 break;
             case 4:
-                SERVICE_MENU.findAllUsers();
+                chooseFindAllMethod(choiceTable);
                 break;
             case 0:
                 System.exit(0);
@@ -57,5 +65,63 @@ public class Menu {
                 System.out.println("no such operations");
         }
     }
+
+    public void chooseAddMethod(int choice) throws SQLException {
+        switch (choice) {
+            case 1:
+                SERVICE_MENU.addUser();
+                break;
+            case 2:
+                SERVICE_MENU.addCar();
+                break;
+            default:
+                System.out.println("no such tables");
+        }
+    }
+
+    public void chooseFindMethod(int choice) throws SQLException {
+        switch (choice) {
+            case 1:
+                SERVICE_MENU.findUser();
+                break;
+            case 2:
+                SERVICE_MENU.findCar();
+                break;
+            default:
+                System.out.println("no such tables");
+        }
+
+    }
+
+    public void chooseDeleteMethod(int choice) throws SQLException {
+        switch (choice) {
+            case 1:
+                SERVICE_MENU.deleteUser();
+                break;
+            case 2:
+                SERVICE_MENU.deleteCar();
+                break;
+            default:
+                System.out.println("no such tables");
+        }
+
+    }
+
+    public void chooseFindAllMethod(int choice) throws SQLException {
+        switch (choice) {
+            case 1:
+                SERVICE_MENU.findAllUsers();
+                break;
+            case 2:
+                SERVICE_MENU.findAllCars();
+                break;
+            default:
+                System.out.println("no such tables");
+        }
+
+    }
+
+
+
 }
 

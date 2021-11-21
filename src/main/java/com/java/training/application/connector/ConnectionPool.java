@@ -7,29 +7,25 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.concurrent.locks.ReentrantLock;
 
-// TODO: 13.11.2021 auto increase 
-// TODO: 13.11.2021 не использовать synchronized
-public class ConnectionPool {
 
+public enum ConnectionPool {
+
+    INSTANCE;
     private final static Logger logger = Logger.getLogger(ConnectionPool.class);
     private static final DbPropertyReader DB_PROPERTY_READER = new DbPropertyReader();
     private static final String JDBC_DRIVER = DB_PROPERTY_READER.getJdbcDriver();
     private static final String databaseUrl = DB_PROPERTY_READER.getDatabaseUrl();
     private static final String userName = DB_PROPERTY_READER.getUSER();
     private static final String password = DB_PROPERTY_READER.getPASSWORD();
-    private static int maxPoolSize;
+    private static int maxPoolSize = 8;
     private static int connNum = 0;
+    private static final ReentrantLock LOCKER = new ReentrantLock();
+    private final ArrayDeque<Connection> freePool = new ArrayDeque<>();
+    private final ArrayDeque<Connection> occupiedPool = new ArrayDeque<>();
 
-    private final Stack<Connection> freePool = new Stack<>(); // TODO: 13.11.2021 use arraydeque
-    private final Set<Connection> occupiedPool = new HashSet<>();
-
-    public ConnectionPool(int maxSize) {
-        this.maxPoolSize = maxSize;
-    }
 
     public synchronized Connection getConnection() throws SQLException {
         logger.info("Connections before get: " + (maxPoolSize - connNum));
@@ -55,7 +51,7 @@ public class ConnectionPool {
         if (!occupiedPool.remove(connection)) {
             throw new SQLException("The connection is returned already or it isn't for this pool");
         }
-        freePool.push(connection);
+        freePool.addLast(connection);
         autoChangeMaxPoolSize();
         logger.info("Connections after return: " + (maxPoolSize - connNum));
     }
@@ -80,7 +76,7 @@ public class ConnectionPool {
     private Connection getConnectionFromPool() {
         Connection connection = null;
         if (freePool.size() > 0) {
-            connection = freePool.pop();
+            connection = freePool.removeLast();
             occupiedPool.add(connection);
         }
         return connection;
@@ -110,7 +106,7 @@ public class ConnectionPool {
     }
 
     private boolean isCapacityNeedIncrease() {
-        return (double) connNum / maxPoolSize >= 0.8 && maxPoolSize < 29;
+        return (double) connNum / maxPoolSize >= 0.8 && maxPoolSize <= 28;
     }
 
     private boolean isCapacityNeeDecrease() {
@@ -120,12 +116,12 @@ public class ConnectionPool {
     private void autoChangeMaxPoolSize() {
         if (isCapacityNeedIncrease()) {
             logger.info("Increase maxPoolSize...");
-            maxPoolSize += 3;
+            maxPoolSize += 4;
         }
 
         if (isCapacityNeeDecrease()) {
             logger.info("Decrease maxPoolSize...");
-            maxPoolSize += 3;
+            maxPoolSize -= 4;
         }
 
     }

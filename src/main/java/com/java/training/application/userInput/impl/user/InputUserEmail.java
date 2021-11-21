@@ -22,7 +22,4 @@ public class InputUserEmail implements InputString {
     }
     return email;
     }
-
-
-
 }

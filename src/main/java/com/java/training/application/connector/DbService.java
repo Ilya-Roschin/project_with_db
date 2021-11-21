@@ -1,6 +1,8 @@
 package com.java.training.application.connector;
 
-import com.java.training.application.maper.impl.UserMapper;
+import com.java.training.application.maper.CarMapper;
+import com.java.training.application.maper.UserMapper;
+import com.java.training.application.model.Car;
 import com.java.training.application.model.User;
 import org.apache.log4j.Logger;
 
@@ -15,9 +17,10 @@ import java.util.List;
 public class DbService {
 
     private final static Logger logger = Logger.getLogger(DbService.class);
-    private static final UserMapper MAPPER = new UserMapper();
+    private static final UserMapper USER_MAPPER = new UserMapper();
+    private static final CarMapper CAR_MAPPER = new CarMapper();
 
-    public List<User> sqlSelect(Connection connection) throws SQLException {
+    public List<User> sqlSelectUser(Connection connection) throws SQLException {
         final String sql = "SELECT * FROM user";
 
         logger.info("Executing statement...");
@@ -30,19 +33,37 @@ public class DbService {
 
         List<User> users = new ArrayList<>();
         while (resultSet.next()) {
-            User user = MAPPER.mapTableToUser(resultSet);
-            users.add(user);
+            users.add(USER_MAPPER.mapTableToUser(resultSet));
         }
-
-        logger.info("Closing connection and releasing resources...");
         resultSet.close();
         logger.info("Close statement...");
         statement.close();
         return users;
     }
 
-    public void sqlDeleteById(Connection connection, long id) throws SQLException {
-        final String sql = "DELETE FROM user WHERE id_user = " + id;
+    public List<Car> sqlSelectCar(Connection connection) throws SQLException {
+        final String sql = "SELECT * FROM car";
+
+        logger.info("Executing statement...");
+        Statement statement = connection.createStatement();
+
+        ResultSet resultSet = statement.executeQuery(sql);
+
+        logger.info("Retrieving data from database...");
+        System.out.println("\ncar:");
+
+        List<Car> cars = new ArrayList<>();
+        while (resultSet.next()) {
+            cars.add(CAR_MAPPER.mapTableToСar(resultSet));
+        }
+        resultSet.close();
+        logger.info("Close statement...");
+        statement.close();
+        return cars;
+    }
+
+    public void sqlDeleteById(Connection connection, long id, String table, String column) throws SQLException {
+        final String sql = "DELETE FROM " + table + " WHERE " + column + " = " + id;
         PreparedStatement statement = connection.prepareStatement(sql);
         logger.info("Executing statement...");
         logger.info("Delete user from database...");
@@ -52,11 +73,8 @@ public class DbService {
         statement.close();
     }
 
-    public void sqlInsert(Connection connection, User user) throws SQLException {
-        List<String> phones = user.getMobileNumber();
-        String sql = "INSERT INTO user (id_user, user_role, first_name, last_name, email, phone_number) VALUES "
-                + "(" + user.getId() + ", '" + user.getRole() + "', '" + user.getFirstName() + "', '"
-                + user.getLastName() + "', '" + user.getEmail() + "', '" + phones.get(0) + "')";
+    public void sqlInsert(Connection connection, String query) throws SQLException {
+        String sql = query;
         PreparedStatement statement = connection.prepareStatement(sql);
         logger.info("Executing statement...");
         statement.executeUpdate(sql);
