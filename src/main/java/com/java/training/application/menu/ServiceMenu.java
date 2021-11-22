@@ -34,7 +34,7 @@ public class ServiceMenu {
 
     public void findUser() throws SQLException {
         final long userId = READER.readLong("Enter user id: ");
-        final Optional<User> foundUser = USER_SERVICE.findByName(userId);
+        final Optional<? extends Entity> foundUser = USER_SERVICE.findByName(userId);
         foundUser.ifPresent(System.out::println);
     }
 
@@ -44,7 +44,7 @@ public class ServiceMenu {
     }
 
     public void findAllUsers() throws SQLException {
-        final List<User> foundUsers = USER_SERVICE.findAll();
+        final List<? extends Entity> foundUsers = USER_SERVICE.findAll();
         if (!foundUsers.isEmpty()) {
             foundUsers.forEach(System.out::println);
         } else {
@@ -58,7 +58,7 @@ public class ServiceMenu {
 
     public void findCar() throws SQLException {
         final long id = READER.readLong("Enter car id: ");
-        final Optional<Car> foundCar = CAR_SERVICE.findByName(id);
+        final Optional<? extends Entity> foundCar = CAR_SERVICE.findByName(id);
         foundCar.ifPresent(System.out::println);
     }
 
@@ -68,7 +68,7 @@ public class ServiceMenu {
     }
 
     public void findAllCars() throws SQLException {
-        final List<Car> foundCars = CAR_SERVICE.findAll();
+        final List<? extends Entity> foundCars = CAR_SERVICE.findAll();
         if (!foundCars.isEmpty()) {
             foundCars.forEach(System.out::println);
         } else {

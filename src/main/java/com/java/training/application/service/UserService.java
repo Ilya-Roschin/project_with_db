@@ -25,9 +25,9 @@ public enum UserService {
     private static final ConnectionPool CONNECTION_POOL = ConnectionPool.INSTANCE;
     private static final Logger logger = Logger.getLogger(Repository.class);
 
-    public List<User> findAll() throws SQLException {
+    public List<? extends Entity> findAll() throws SQLException {
         Connection connection = CONNECTION_POOL.getConnection();
-        List<User> users = DB_SERVICE.sqlSelectUser(connection);
+        final List<? extends Entity> users = DB_SERVICE.findAll(connection, User.class);
         logger.info("Close connection...");
         CONNECTION_POOL.returnConnection(connection);
         return users;
@@ -52,8 +52,8 @@ public enum UserService {
         CONNECTION_POOL.returnConnection(connection);
     }
 
-    public Optional<User> findByName(long id) throws SQLException {
-        return findAll().stream().filter(p -> p.getId() == id).findFirst();
+    public Optional<? extends Entity> findByName(long id) throws SQLException {
+        return findAll().stream().filter(User.class::isInstance).filter(p -> p.getId() == id).findFirst();
     }
 
     private User initUser() {

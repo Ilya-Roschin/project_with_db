@@ -1,6 +1,5 @@
 package com.java.training.application.userInput.impl.user;
 
-
 import com.java.training.application.reader.Reader;
 import com.java.training.application.userInput.InputString;
 

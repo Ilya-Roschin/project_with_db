@@ -5,5 +5,5 @@ import java.util.List;
 @FunctionalInterface
 public interface InputList {
 
-    public List<String> inputList();
+    List<String> inputList();
 }

@@ -2,7 +2,7 @@ package com.java.training.application.model;
 
 import java.util.UUID;
 
-public class Car {
+public class Car implements Entity {
 
     private final long id;
     private final String name;

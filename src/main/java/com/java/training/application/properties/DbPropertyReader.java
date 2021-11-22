@@ -1,7 +1,7 @@
 package com.java.training.application.properties;
-// TODO: 13.11.2021 1) добавить класс DbProperty
-// TODO: 13.11.2021 3) sql.password ... вывеси в интерфейс Constant
-// TODO: 13.11.2021
+
+import com.java.training.application.model.DbProperty;
+import org.apache.log4j.Logger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -10,26 +10,17 @@ import java.util.Properties;
 
 public class DbPropertyReader {
 
-    private String jdbcDriver;
-    private String databaseUrl;
-    private String user;
-    private String password;
+    private final Logger logger = Logger.getLogger(this.getClass());
 
-    public DbPropertyReader() {
-        readProperty();
-    }
-
-    private void readProperty() {
+    public DbProperty readProperty() {
         try (InputStream input = new FileInputStream("src/main/resources/application.properties")) {
             Properties properties = new Properties();
             properties.load(input);
-            jdbcDriver = properties.getProperty("sql.jdbc.driver");
-            databaseUrl = properties.getProperty("sql.database.url");
-            user = properties.getProperty("sql.user");
-            password = properties.getProperty("sql.password");
+            return new DbProperty(properties.getProperty("sql.database.url"), properties.getProperty("sql.user"),
+                    properties.getProperty("sql.password"));
         } catch (IOException e) {
+            logger.error(e.getMessage(), e);
             e.printStackTrace();
-            // TODO: 13.11.2021 log.error
         }
         return null;
         // TODO: 22.11.2021 исправить

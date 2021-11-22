@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import static java.util.Collections.unmodifiableList;
 
-public class User {
+public class User implements Entity {
 
     private final long id;
     private final String role;
