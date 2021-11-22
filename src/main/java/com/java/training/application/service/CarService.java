@@ -1,8 +1,9 @@
-package com.java.training.application.service.modelService.impl;
+package com.java.training.application.service;
 
 import com.java.training.application.connector.ConnectionPool;
-import com.java.training.application.connector.DbService;
+import com.java.training.application.dao.Repository;
 import com.java.training.application.model.Car;
+import com.java.training.application.model.Entity;
 import com.java.training.application.userInput.InputString;
 import com.java.training.application.userInput.impl.car.InputCarColor;
 import com.java.training.application.userInput.impl.car.InputCarName;
@@ -17,13 +18,13 @@ public enum CarService {
 
     INSTANCE;
 
-    private static final DbService DB_SERVICE = new DbService();
+    private static final Repository DB_SERVICE = new Repository();
     private static final ConnectionPool CONNECTION_POOL = ConnectionPool.INSTANCE;
-    private final static Logger logger = Logger.getLogger(DbService.class);
+    private final static Logger logger = Logger.getLogger(Repository.class);
 
-    public List<Car> findAll() throws SQLException {
+    public List<Entity> findAll() throws SQLException {
         Connection connection = CONNECTION_POOL.getConnection();
-        List<Car> cars = DB_SERVICE.sqlSelectCar(connection);
+        final List<Entity> cars = DB_SERVICE.findAll(connection, Car.class);
         logger.info("Close connection...");
         CONNECTION_POOL.returnConnection(connection);
         return cars;
@@ -40,15 +41,14 @@ public enum CarService {
     }
 
     public void delete(final long userId) throws SQLException {
-        boolean deleted = false;
         Connection connection = CONNECTION_POOL.getConnection();
         DB_SERVICE.sqlDeleteById(connection, userId, "car", "id_car");
         logger.info("Close connection...");
         CONNECTION_POOL.returnConnection(connection);
     }
 
-    public Optional<Car> findByName(long id) throws SQLException {
-        return findAll().stream().filter(p -> p.getId() == id).findFirst();
+    public Optional<Entity> findByName(long id) throws SQLException {
+        return findAll().stream().filter(Car.class::isInstance).filter(p -> p.getId() == id).findFirst();
     }
 
     private Car initCar() {

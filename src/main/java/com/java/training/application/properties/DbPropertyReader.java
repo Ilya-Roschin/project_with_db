@@ -31,21 +31,11 @@ public class DbPropertyReader {
             e.printStackTrace();
             // TODO: 13.11.2021 log.error
         }
+        return null;
+        // TODO: 22.11.2021 исправить
     }
 
-    public String getJdbcDriver() {
-        return jdbcDriver;
-    }
 
-    public String getDatabaseUrl() {
-        return databaseUrl;
-    }
 
-    public String getUSER() {
-        return user;
-    }
 
-    public String getPASSWORD() {
-        return password;
-    }
 }

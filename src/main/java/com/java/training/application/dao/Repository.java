@@ -1,8 +1,9 @@
-package com.java.training.application.connector;
+package com.java.training.application.dao;
 
 import com.java.training.application.maper.CarMapper;
 import com.java.training.application.maper.UserMapper;
 import com.java.training.application.model.Car;
+import com.java.training.application.model.Entity;
 import com.java.training.application.model.User;
 import org.apache.log4j.Logger;
 
@@ -14,52 +15,42 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DbService {
+public class Repository {
 
-    private final static Logger logger = Logger.getLogger(DbService.class);
+    private static final Logger logger = Logger.getLogger(Repository.class);
     private static final UserMapper USER_MAPPER = new UserMapper();
     private static final CarMapper CAR_MAPPER = new CarMapper();
 
-    public List<User> sqlSelectUser(Connection connection) throws SQLException {
-        final String sql = "SELECT * FROM user";
+    public List<Entity> findAll(Connection connection, Class<? extends Entity> clazz) throws SQLException {
+        final StringBuilder sql = new StringBuilder("SELECT * FROM ");
+        
+        if (clazz == User.class) {
+            sql.append("user");
+        } else if (clazz == Car.class) {
+            sql.append("cars");
+        }
 
         logger.info("Executing statement...");
         Statement statement = connection.createStatement();
 
-        ResultSet resultSet = statement.executeQuery(sql);
+        ResultSet resultSet = statement.executeQuery(sql.toString());
 
         logger.info("Retrieving data from database...");
         System.out.println("\nuser:");
 
-        List<User> users = new ArrayList<>();
+        List<Entity> entities = new ArrayList<>();
+
         while (resultSet.next()) {
-            users.add(USER_MAPPER.mapTableToUser(resultSet));
+            if (clazz == User.class) {
+                entities.add(USER_MAPPER.mapTableToUser(resultSet));
+            } else if (clazz == Car.class) {
+                entities.add(CAR_MAPPER.mapTableToСar(resultSet));
+            }
         }
         resultSet.close();
         logger.info("Close statement...");
         statement.close();
-        return users;
-    }
-
-    public List<Car> sqlSelectCar(Connection connection) throws SQLException {
-        final String sql = "SELECT * FROM car";
-
-        logger.info("Executing statement...");
-        Statement statement = connection.createStatement();
-
-        ResultSet resultSet = statement.executeQuery(sql);
-
-        logger.info("Retrieving data from database...");
-        System.out.println("\ncar:");
-
-        List<Car> cars = new ArrayList<>();
-        while (resultSet.next()) {
-            cars.add(CAR_MAPPER.mapTableToСar(resultSet));
-        }
-        resultSet.close();
-        logger.info("Close statement...");
-        statement.close();
-        return cars;
+        return entities;
     }
 
     public void sqlDeleteById(Connection connection, long id, String table, String column) throws SQLException {

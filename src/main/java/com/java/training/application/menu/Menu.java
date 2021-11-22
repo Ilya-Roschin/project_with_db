@@ -75,7 +75,7 @@ public class Menu {
                 SERVICE_MENU.addCar();
                 break;
             default:
-                System.out.println("no such tables");
+                System.out.println("no such operations");
         }
     }
 
@@ -88,7 +88,7 @@ public class Menu {
                 SERVICE_MENU.findCar();
                 break;
             default:
-                System.out.println("no such tables");
+                System.out.println("no such operations");
         }
 
     }
@@ -102,7 +102,7 @@ public class Menu {
                 SERVICE_MENU.deleteCar();
                 break;
             default:
-                System.out.println("no such tables");
+                System.out.println("no such operations");
         }
 
     }

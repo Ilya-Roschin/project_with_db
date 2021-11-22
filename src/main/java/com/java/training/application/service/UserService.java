@@ -1,7 +1,8 @@
-package com.java.training.application.service.modelService.impl;
+package com.java.training.application.service;
 
 import com.java.training.application.connector.ConnectionPool;
-import com.java.training.application.connector.DbService;
+import com.java.training.application.dao.Repository;
+import com.java.training.application.model.Entity;
 import com.java.training.application.model.User;
 import com.java.training.application.userInput.InputList;
 import com.java.training.application.userInput.InputString;
@@ -20,9 +21,9 @@ import java.util.Optional;
 public enum UserService {
 
     INSTANCE;
-    private static final DbService DB_SERVICE = new DbService();
+    private static final Repository DB_SERVICE = new Repository();
     private static final ConnectionPool CONNECTION_POOL = ConnectionPool.INSTANCE;
-    private static final Logger logger = Logger.getLogger(DbService.class);
+    private static final Logger logger = Logger.getLogger(Repository.class);
 
     public List<User> findAll() throws SQLException {
         Connection connection = CONNECTION_POOL.getConnection();
@@ -45,7 +46,6 @@ public enum UserService {
     }
 
     public void delete(final long userId) throws SQLException {
-        boolean deleted = false;
         Connection connection = CONNECTION_POOL.getConnection();
         DB_SERVICE.sqlDeleteById(connection, userId, "user", "id_user");
         logger.info("Close connection...");

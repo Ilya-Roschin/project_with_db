@@ -1,10 +1,9 @@
 package com.java.training.application.menu;
 
-import com.java.training.application.model.Car;
-import com.java.training.application.model.User;
+import com.java.training.application.model.Entity;
 import com.java.training.application.reader.Reader;
-import com.java.training.application.service.modelService.impl.CarService;
-import com.java.training.application.service.modelService.impl.UserService;
+import com.java.training.application.service.CarService;
+import com.java.training.application.service.UserService;
 
 import java.sql.SQLException;
 import java.util.List;

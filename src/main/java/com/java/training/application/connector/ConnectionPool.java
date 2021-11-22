@@ -39,12 +39,14 @@ public enum ConnectionPool {
         }
         connection = makeAvailable(connection);
         autoChangeMaxPoolSize();
-        logger.info("Connections after get: " + (maxPoolSize - connNum));
+        logger.info("Connections after get: " + (maxPoolSize - occupiedPool.size()));
+        LOCKER.unlock();
         return connection;
     }
 
-    public synchronized void returnConnection(Connection connection) throws SQLException {
-        logger.info("Connections before return: " + (maxPoolSize - connNum));
+    public void returnConnection(Connection connection) throws SQLException {
+        LOCKER.lock();
+        logger.info("Connections before return: " + (maxPoolSize - occupiedPool.size()));
         if (connection == null) {
             throw new NullPointerException();
         }
@@ -53,7 +55,8 @@ public enum ConnectionPool {
         }
         freePool.addLast(connection);
         autoChangeMaxPoolSize();
-        logger.info("Connections after return: " + (maxPoolSize - connNum));
+        logger.info("Connections after return: " + (maxPoolSize - occupiedPool.size()));
+        LOCKER.unlock();
     }
 
     private synchronized boolean isFull() {
