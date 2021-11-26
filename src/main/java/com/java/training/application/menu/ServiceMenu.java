@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+import static com.java.training.application.util.Constant.*;
+
 public class ServiceMenu {
 
     private static final Reader READER = Reader.getInstance();
@@ -33,13 +35,13 @@ public class ServiceMenu {
     }
 
     public void findUser() throws SQLException {
-        final long userId = READER.readLong("Enter user id: ");
+        final long userId = READER.readLong(MESSAGE_ENTER_USER_ID);
         final Optional<? extends Entity> foundUser = USER_SERVICE.findByName(userId);
         foundUser.ifPresent(System.out::println);
     }
 
     public void deleteUser() throws SQLException {
-        final long userId = READER.readLong("Enter user ID: ");
+        final long userId = READER.readLong(MESSAGE_ENTER_USER_ID);
         USER_SERVICE.delete(userId);
     }
 
@@ -48,7 +50,7 @@ public class ServiceMenu {
         if (!foundUsers.isEmpty()) {
             foundUsers.forEach(System.out::println);
         } else {
-            System.out.println("No users!");
+            System.out.println(MESSAGE_NO_USERS);
         }
     }
 
@@ -57,13 +59,13 @@ public class ServiceMenu {
     }
 
     public void findCar() throws SQLException {
-        final long id = READER.readLong("Enter car id: ");
+        final long id = READER.readLong(MESSAGE_ENTER_CAR_ID);
         final Optional<? extends Entity> foundCar = CAR_SERVICE.findByName(id);
         foundCar.ifPresent(System.out::println);
     }
 
     public void deleteCar() throws SQLException {
-        final long carId = READER.readLong("Enter car ID: ");
+        final long carId = READER.readLong(MESSAGE_ENTER_CAR_ID);
         CAR_SERVICE.delete(carId);
     }
 
@@ -72,7 +74,7 @@ public class ServiceMenu {
         if (!foundCars.isEmpty()) {
             foundCars.forEach(System.out::println);
         } else {
-            System.out.println("No cars!");
+            System.out.println(MESSAGE_NO_CARS);
         }
     }
 

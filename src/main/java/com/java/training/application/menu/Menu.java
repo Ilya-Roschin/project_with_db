@@ -14,7 +14,9 @@ public class Menu {
                 menu.printMainMenu();
                 final int choice = menu.readMenu();
                 menu.makeChoiceOfOperation(choice);
-
+                if(choice == 0) {
+                    break;
+                }
             }
         } catch (final Exception e) {
             System.err.println(e.getMessage());

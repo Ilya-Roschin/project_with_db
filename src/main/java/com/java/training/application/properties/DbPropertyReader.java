@@ -13,20 +13,22 @@ public class DbPropertyReader {
     private final Logger logger = Logger.getLogger(this.getClass());
 
     public DbProperty readProperty() {
+        Properties properties = new Properties();
+        String url = "";
+        String user = "";
+        String password = "";
         try (InputStream input = new FileInputStream("src/main/resources/application.properties")) {
-            Properties properties = new Properties();
             properties.load(input);
-            return new DbProperty(properties.getProperty("sql.database.url"), properties.getProperty("sql.user"),
-                    properties.getProperty("sql.password"));
+            url = properties.getProperty("sql.database.url");
+            user = properties.getProperty("sql.user");
+            password = properties.getProperty("sql.password");
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
             e.printStackTrace();
         }
-        return null;
-        // TODO: 22.11.2021 исправить
+        return new DbProperty(url, user, password);
+
     }
-
-
 
 
 }

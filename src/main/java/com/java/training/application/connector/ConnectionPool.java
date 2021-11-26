@@ -11,6 +11,9 @@ import java.sql.Statement;
 import java.util.ArrayDeque;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static com.java.training.application.util.Constant.MESSAGE_CONNECTIONS_AFTER_GET;
+import static com.java.training.application.util.Constant.MESSAGE_CONNECTIONS_BEFORE_GET;
+
 public enum ConnectionPool {
 
     INSTANCE;
@@ -32,7 +35,7 @@ public enum ConnectionPool {
 
     public Connection getConnection() throws SQLException {
         LOCKER.lock();
-        logger.info("Connections before get: " + (maxPoolSize - occupiedPool.size()));
+        logger.info(MESSAGE_CONNECTIONS_BEFORE_GET + (maxPoolSize - occupiedPool.size()));
         Connection connection;
         if (isFull()) {
             throw new SQLException("The connection pool is full.");
@@ -43,14 +46,14 @@ public enum ConnectionPool {
         }
         connection = makeAvailable(connection);
         autoChangeMaxPoolSize();
-        logger.info("Connections after get: " + (maxPoolSize - occupiedPool.size()));
+        logger.info(MESSAGE_CONNECTIONS_AFTER_GET + (maxPoolSize - occupiedPool.size()));
         LOCKER.unlock();
         return connection;
     }
 
     public void returnConnection(Connection connection) throws SQLException {
         LOCKER.lock();
-        logger.info("Connections before return: " + (maxPoolSize - occupiedPool.size()));
+        logger.info(MESSAGE_CONNECTIONS_BEFORE_GET + (maxPoolSize - occupiedPool.size()));
         if (connection == null) {
             throw new NullPointerException();
         }
@@ -59,7 +62,7 @@ public enum ConnectionPool {
         }
         freePool.addLast(connection);
         autoChangeMaxPoolSize();
-        logger.info("Connections after return: " + (maxPoolSize - occupiedPool.size()));
+        logger.info(MESSAGE_CONNECTIONS_AFTER_GET + (maxPoolSize - occupiedPool.size()));
         LOCKER.unlock();
     }
 
