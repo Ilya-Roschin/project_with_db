@@ -9,7 +9,10 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-import static com.java.training.application.util.Constant.*;
+import static com.java.training.application.util.Constant.MESSAGE_ENTER_CAR_ID;
+import static com.java.training.application.util.Constant.MESSAGE_ENTER_USER_ID;
+import static com.java.training.application.util.Constant.MESSAGE_NO_CARS;
+import static com.java.training.application.util.Constant.MESSAGE_NO_USERS;
 
 public class ServiceMenu {
 

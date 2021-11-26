@@ -1,6 +1,8 @@
 package com.java.training.application.service;
 
 import com.java.training.application.connector.ConnectionPool;
+import com.java.training.application.dao.CarRepository;
+import com.java.training.application.dao.Repository;
 import com.java.training.application.dao.UserRepository;
 import com.java.training.application.model.Car;
 import com.java.training.application.model.Entity;
@@ -20,14 +22,14 @@ public enum CarService {
 
     INSTANCE;
 
-    private static final UserRepository DB_SERVICE = new UserRepository();
+    private static final Repository DB_SERVICE = new CarRepository();
     private static final ConnectionPool CONNECTION_POOL = ConnectionPool.INSTANCE;
-    private final static Logger logger = Logger.getLogger(UserRepository.class);
+    private static final Logger LOGGER = Logger.getLogger(UserRepository.class);
 
     public List<Entity> findAll() throws SQLException {
         Connection connection = CONNECTION_POOL.getConnection();
         final List<Entity> cars = DB_SERVICE.findAll(connection, Car.class);
-        logger.info(MESSAGE_CLOSE_CONNECTION);
+        LOGGER.info(MESSAGE_CLOSE_CONNECTION);
         CONNECTION_POOL.returnConnection(connection);
         return cars;
     }
@@ -35,17 +37,16 @@ public enum CarService {
     public void add() throws SQLException {
         final Car car = initCar();
         Connection connection = CONNECTION_POOL.getConnection();
-        String query = "INSERT INTO car (id_car, car_name, car_color) VALUES "
-                + "(" + car.getId() + ", '" + car.getName() + "', '" + car.getColor() + "')";
-        DB_SERVICE.insert(connection, query);
-        logger.info(MESSAGE_CLOSE_CONNECTION);
+        String data = "(" + car.getId() + ", '" + car.getName() + "', '" + car.getColor() + "')";
+        DB_SERVICE.insert(connection, data);
+        LOGGER.info(MESSAGE_CLOSE_CONNECTION);
         CONNECTION_POOL.returnConnection(connection);
     }
 
     public void delete(final long userId) throws SQLException {
         Connection connection = CONNECTION_POOL.getConnection();
         DB_SERVICE.DeleteById(connection, userId, "car", "id_car");
-        logger.info(MESSAGE_CLOSE_CONNECTION);
+        LOGGER.info(MESSAGE_CLOSE_CONNECTION);
         CONNECTION_POOL.returnConnection(connection);
     }
 
@@ -56,7 +57,6 @@ public enum CarService {
     private Car initCar() {
         final InputString inputCarName = new InputCarName();
         final InputString inputCarColor = new InputCarColor();
-
         return new Car(inputCarName.inputString(),
                 inputCarColor.inputString());
     }

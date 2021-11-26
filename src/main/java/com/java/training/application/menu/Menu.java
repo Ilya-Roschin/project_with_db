@@ -1,11 +1,16 @@
 package com.java.training.application.menu;
 
+import org.apache.log4j.Logger;
+
 import java.sql.SQLException;
 import java.util.Scanner;
+
+import static com.java.training.application.util.Constant.MESSAGE_NO_SUCH_OPERATIONS;
 
 public class Menu {
 
     private static final ServiceMenu SERVICE_MENU = ServiceMenu.getInstance();
+    private static final Logger LOGGER = Logger.getLogger(Menu.class);
 
     public static void run() {
         final Menu menu = new Menu();
@@ -14,12 +19,12 @@ public class Menu {
                 menu.printMainMenu();
                 final int choice = menu.readMenu();
                 menu.makeChoiceOfOperation(choice);
-                if(choice == 0) {
+                if (choice == 0) {
                     break;
                 }
             }
         } catch (final Exception e) {
-            System.err.println(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
     }
 
@@ -64,7 +69,7 @@ public class Menu {
                 System.exit(0);
                 break;
             default:
-                System.out.println("no such operations");
+                System.out.println(MESSAGE_NO_SUCH_OPERATIONS);
         }
     }
 
@@ -77,7 +82,7 @@ public class Menu {
                 SERVICE_MENU.addCar();
                 break;
             default:
-                System.out.println("no such operations");
+                System.out.println(MESSAGE_NO_SUCH_OPERATIONS);
         }
     }
 
@@ -90,7 +95,7 @@ public class Menu {
                 SERVICE_MENU.findCar();
                 break;
             default:
-                System.out.println("no such operations");
+                System.out.println(MESSAGE_NO_SUCH_OPERATIONS);
         }
 
     }
@@ -104,7 +109,7 @@ public class Menu {
                 SERVICE_MENU.deleteCar();
                 break;
             default:
-                System.out.println("no such operations");
+                System.out.println(MESSAGE_NO_SUCH_OPERATIONS);
         }
 
     }
@@ -118,11 +123,10 @@ public class Menu {
                 SERVICE_MENU.findAllCars();
                 break;
             default:
-                System.out.println("no such tables");
+                System.out.println("no such entity's");
         }
 
     }
-
 
 
 }

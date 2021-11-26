@@ -1,7 +1,7 @@
 package com.java.training.application.model;
 
 public class DbProperty {
-    
+
     private final String url;
     private final String user;
     private final String password;

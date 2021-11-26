@@ -2,6 +2,8 @@ package com.java.training.application.util;
 
 public interface Constant {
 
+    int CONNECTION_POOL_SIZE = 8;
+
     String MESSAGE_NO_USERS = "No users!";
     String MESSAGE_NO_CARS = "No cars!";
 
@@ -15,5 +17,8 @@ public interface Constant {
     String MESSAGE_CLOSE_STATEMENT = "Close statement...";
 
     String MESSAGE_CLOSE_CONNECTION = "Close connection...";
+
+    String MESSAGE_NO_SUCH_OPERATIONS = "no such operations";
+
 
 }

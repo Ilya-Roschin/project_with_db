@@ -1,12 +1,10 @@
 package com.java.training.application.userInput.impl.user;
 
-import com.java.training.application.reader.Reader;
 import com.java.training.application.service.UserRoleService;
 import com.java.training.application.userInput.InputString;
 
 public class InputUserRole implements InputString {
 
-    private static final Reader READER = Reader.getInstance();
     private static final UserRoleService USER_ROLE_SERVICE = UserRoleService.getInstance();
 
     @Override

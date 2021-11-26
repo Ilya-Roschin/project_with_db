@@ -19,7 +19,7 @@ public class InputUserEmail implements InputString {
         String email = READER.readLine("input new Email: ");
         while (!EMAIL_VALIDATOR.validate(email)) {
             email = READER.readLine("invalid email. Enter email again:");
-    }
-    return email;
+        }
+        return email;
     }
 }

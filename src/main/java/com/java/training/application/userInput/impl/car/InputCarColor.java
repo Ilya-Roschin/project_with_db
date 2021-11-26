@@ -1,7 +1,7 @@
 package com.java.training.application.userInput.impl.car;
 
-import com.java.training.application.userInput.InputString;
 import com.java.training.application.reader.Reader;
+import com.java.training.application.userInput.InputString;
 
 public class InputCarColor implements InputString {
 

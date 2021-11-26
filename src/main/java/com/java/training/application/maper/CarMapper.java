@@ -12,5 +12,4 @@ public class CarMapper {
                 resultSet.getString("car_name"),
                 resultSet.getString("car_color"));
     }
-
 }

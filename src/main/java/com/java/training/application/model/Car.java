@@ -22,10 +22,10 @@ public class Car implements Entity {
 
     @Override
     public String toString() {
-        final StringBuilder text = new StringBuilder("\n================\n" + "id: "
-                + id + "\n" + "Name: " + name + "\n" + "Color: " + color +"\n");
-        return text.toString();
+        return "\n================\n" + "id: "
+                + id + "\n" + "Name: " + name + "\n" + "Color: " + color + "\n";
     }
+
     public long getId() {
         return id;
     }

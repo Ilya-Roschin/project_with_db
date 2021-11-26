@@ -11,27 +11,27 @@ import java.sql.Statement;
 import java.util.ArrayDeque;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static com.java.training.application.util.Constant.CONNECTION_POOL_SIZE;
 import static com.java.training.application.util.Constant.MESSAGE_CONNECTIONS_AFTER_GET;
 import static com.java.training.application.util.Constant.MESSAGE_CONNECTIONS_BEFORE_GET;
 
 public enum ConnectionPool {
 
     INSTANCE;
-    
+
     private final DbProperty property;
-    private int maxPoolSize = 8;
+    private int maxPoolSize = CONNECTION_POOL_SIZE ;
     private int connNum = 0;
     private static final Logger logger = Logger.getLogger(ConnectionPool.class);
     private final DbPropertyReader reader = new DbPropertyReader();
     private static final ReentrantLock LOCKER = new ReentrantLock();
-    
+
     private final ArrayDeque<Connection> freePool = new ArrayDeque<>();
     private final ArrayDeque<Connection> occupiedPool = new ArrayDeque<>();
 
     {
         property = reader.readProperty();
     }
-    
 
     public Connection getConnection() throws SQLException {
         LOCKER.lock();

@@ -35,11 +35,10 @@ public class User implements Entity {
 
     @Override
     public String toString() {
-        final StringBuilder text = new StringBuilder("\n================\n" + "id: "
+        return "\n================\n" + "id: "
                 + id + "\n" + "Role:" + role + "\n" + "First name: " + firstName + "\n"
-                + "Last name: " + lastName +"\n" + "Email: " + email+ "\n" + "Phones: "
-                + numbers +"\n");
-        return text.toString();
+                + "Last name: " + lastName + "\n" + "Email: " + email + "\n" + "Phones: "
+                + numbers + "\n";
     }
 
     public String getFirstName() {

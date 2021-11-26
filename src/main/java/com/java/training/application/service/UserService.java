@@ -1,6 +1,7 @@
 package com.java.training.application.service;
 
 import com.java.training.application.connector.ConnectionPool;
+import com.java.training.application.dao.Repository;
 import com.java.training.application.dao.UserRepository;
 import com.java.training.application.model.Entity;
 import com.java.training.application.model.User;
@@ -23,7 +24,7 @@ import static com.java.training.application.util.Constant.MESSAGE_CLOSE_CONNECTI
 public enum UserService {
 
     INSTANCE;
-    private static final UserRepository DB_SERVICE = new UserRepository();
+    private static final Repository DB_SERVICE = new UserRepository();
     private static final ConnectionPool CONNECTION_POOL = ConnectionPool.INSTANCE;
     private static final Logger logger = Logger.getLogger(UserRepository.class);
 
@@ -39,8 +40,7 @@ public enum UserService {
         final User user = initUser();
         Connection connection = CONNECTION_POOL.getConnection();
         List<String> phones = user.getMobileNumber();
-        String query = "INSERT INTO user (id_user, user_role, first_name, last_name, email, phone_number) VALUES "
-                + "(" + user.getId() + ", '" + user.getRole() + "', '" + user.getFirstName() + "', '"
+        String query = "(" + user.getId() + ", '" + user.getRole() + "', '" + user.getFirstName() + "', '"
                 + user.getLastName() + "', '" + user.getEmail() + "', '" + phones.get(0) + "')";
         DB_SERVICE.insert(connection, query);
         logger.info(MESSAGE_CLOSE_CONNECTION);
