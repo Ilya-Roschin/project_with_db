@@ -12,6 +12,6 @@ public interface Repository {
 
     void DeleteById(Connection connection, long id, String table, String column) throws SQLException;
 
-    void insert(Connection connection, String query) throws SQLException;
+    void insert(Connection connection, String data) throws SQLException;
 
 }
