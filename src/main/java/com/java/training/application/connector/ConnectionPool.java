@@ -20,7 +20,7 @@ public enum ConnectionPool {
     INSTANCE;
 
     private final DbProperty property;
-    private int maxPoolSize = CONNECTION_POOL_SIZE ;
+    private int maxPoolSize = CONNECTION_POOL_SIZE;
     private int connNum = 0;
     private static final Logger logger = Logger.getLogger(ConnectionPool.class);
     private final DbPropertyReader reader = new DbPropertyReader();

@@ -28,7 +28,7 @@ public enum CarService {
 
     public List<Entity> findAll() throws SQLException {
         Connection connection = CONNECTION_POOL.getConnection();
-        final List<Entity> cars = DB_SERVICE.findAll(connection, Car.class);
+        final List<Entity> cars = DB_SERVICE.findAll(Car.class);
         LOGGER.info(MESSAGE_CLOSE_CONNECTION);
         CONNECTION_POOL.returnConnection(connection);
         return cars;
@@ -36,16 +36,14 @@ public enum CarService {
 
     public void add() throws SQLException {
         final Car car = initCar();
-        Connection connection = CONNECTION_POOL.getConnection();
         String data = "(" + car.getId() + ", '" + car.getName() + "', '" + car.getColor() + "')";
-        DB_SERVICE.insert(connection, data);
+        DB_SERVICE.insert(data);
         LOGGER.info(MESSAGE_CLOSE_CONNECTION);
-        CONNECTION_POOL.returnConnection(connection);
     }
 
-    public void delete(final long userId) throws SQLException {
+    public void delete(final long id) throws SQLException {
         Connection connection = CONNECTION_POOL.getConnection();
-        DB_SERVICE.DeleteById(connection, userId, "car", "id_car");
+        DB_SERVICE.deleteById(id, "car", "id_car");
         LOGGER.info(MESSAGE_CLOSE_CONNECTION);
         CONNECTION_POOL.returnConnection(connection);
     }

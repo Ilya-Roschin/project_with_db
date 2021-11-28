@@ -1,5 +1,6 @@
 package com.java.training.application.dao;
 
+import com.java.training.application.connector.ConnectionPool;
 import com.java.training.application.maper.CarMapper;
 import com.java.training.application.model.Entity;
 import org.apache.log4j.Logger;
@@ -12,6 +13,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.java.training.application.util.Constant.MESSAGE_CLOSE_CONNECTION;
 import static com.java.training.application.util.Constant.MESSAGE_CLOSE_STATEMENT;
 import static com.java.training.application.util.Constant.MESSAGE_EXECUTING_STATEMENT;
 
@@ -19,9 +21,11 @@ public class CarRepository implements Repository {
 
     private static final Logger LOGGER = Logger.getLogger(CarRepository.class);
     private static final CarMapper CAR_MAPPER = new CarMapper();
+    private static final ConnectionPool CONNECTION_POOL = ConnectionPool.INSTANCE;
 
     @Override
-    public List<Entity> findAll(Connection connection, Class<? extends Entity> clazz) throws SQLException {
+    public List<Entity> findAll(Class<? extends Entity> clazz) throws SQLException {
+        Connection connection = CONNECTION_POOL.getConnection();
         LOGGER.info(MESSAGE_EXECUTING_STATEMENT);
         Statement statement = connection.createStatement();
 
@@ -36,11 +40,14 @@ public class CarRepository implements Repository {
 
         LOGGER.info(MESSAGE_CLOSE_STATEMENT);
         statement.close();
+        LOGGER.info(MESSAGE_CLOSE_CONNECTION);
+        CONNECTION_POOL.returnConnection(connection);
         return entities;
     }
 
     @Override
-    public void DeleteById(Connection connection, long id, String table, String column) throws SQLException {
+    public void deleteById(long id, String table, String column) throws SQLException {
+        Connection connection = CONNECTION_POOL.getConnection();
         final String sql = "DELETE FROM " + table + " WHERE " + column + " = " + id;
         PreparedStatement statement = connection.prepareStatement(sql);
         LOGGER.info(MESSAGE_EXECUTING_STATEMENT);
@@ -49,15 +56,20 @@ public class CarRepository implements Repository {
         LOGGER.info("User " + "'" + id + "' deleted");
         LOGGER.info(MESSAGE_CLOSE_STATEMENT);
         statement.close();
+        LOGGER.info(MESSAGE_CLOSE_CONNECTION);
+        CONNECTION_POOL.returnConnection(connection);
     }
 
     @Override
-    public void insert(Connection connection, String data) throws SQLException {
+    public void insert(String data) throws SQLException {
+        Connection connection = CONNECTION_POOL.getConnection();
         String sql = "INSERT INTO car (id_car, car_name, car_color) VALUES " + data;
         PreparedStatement statement = connection.prepareStatement(sql);
         LOGGER.info(MESSAGE_EXECUTING_STATEMENT);
         statement.executeUpdate(sql);
         LOGGER.info(MESSAGE_CLOSE_STATEMENT);
         statement.close();
+        LOGGER.info(MESSAGE_CLOSE_CONNECTION);
+        CONNECTION_POOL.returnConnection(connection);
     }
 }
