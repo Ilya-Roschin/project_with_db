@@ -27,19 +27,20 @@ public class CarRepository implements Repository {
     public List<Entity> findAll(Class<? extends Entity> clazz) throws SQLException {
         Connection connection = CONNECTION_POOL.getConnection();
         LOGGER.info(MESSAGE_EXECUTING_STATEMENT);
-        Statement statement = connection.createStatement();
+        List<Entity> entities;
+        try (Statement statement = connection.createStatement()) {
 
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM car");
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM car");
 
-        LOGGER.info("Retrieving data from database...");
-        System.out.println("\nuser:");
+            LOGGER.info("Retrieving data from database...");
+            System.out.println("\nuser:");
 
-        List<Entity> entities = new ArrayList<>();
-        entities.add(CAR_MAPPER.mapTableToСar(resultSet));
-        resultSet.close();
+            entities = new ArrayList<>();
+            entities.add(CAR_MAPPER.mapTableToСar(resultSet));
+            resultSet.close();
 
-        LOGGER.info(MESSAGE_CLOSE_STATEMENT);
-        statement.close();
+            LOGGER.info(MESSAGE_CLOSE_STATEMENT);
+        }
         LOGGER.info(MESSAGE_CLOSE_CONNECTION);
         CONNECTION_POOL.returnConnection(connection);
         return entities;
@@ -49,13 +50,13 @@ public class CarRepository implements Repository {
     public void deleteById(long id, String table, String column) throws SQLException {
         Connection connection = CONNECTION_POOL.getConnection();
         final String sql = "DELETE FROM " + table + " WHERE " + column + " = " + id;
-        PreparedStatement statement = connection.prepareStatement(sql);
-        LOGGER.info(MESSAGE_EXECUTING_STATEMENT);
-        LOGGER.info("Delete car from database...");
-        statement.executeUpdate(sql);
-        LOGGER.info("User " + "'" + id + "' deleted");
-        LOGGER.info(MESSAGE_CLOSE_STATEMENT);
-        statement.close();
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            LOGGER.info(MESSAGE_EXECUTING_STATEMENT);
+            LOGGER.info("Delete car from database...");
+            statement.executeUpdate(sql);
+            LOGGER.info("User " + "'" + id + "' deleted");
+            LOGGER.info(MESSAGE_CLOSE_STATEMENT);
+        }
         LOGGER.info(MESSAGE_CLOSE_CONNECTION);
         CONNECTION_POOL.returnConnection(connection);
     }
@@ -64,11 +65,11 @@ public class CarRepository implements Repository {
     public void insert(String data) throws SQLException {
         Connection connection = CONNECTION_POOL.getConnection();
         String sql = "INSERT INTO car (id_car, car_name, car_color) VALUES " + data;
-        PreparedStatement statement = connection.prepareStatement(sql);
-        LOGGER.info(MESSAGE_EXECUTING_STATEMENT);
-        statement.executeUpdate(sql);
-        LOGGER.info(MESSAGE_CLOSE_STATEMENT);
-        statement.close();
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            LOGGER.info(MESSAGE_EXECUTING_STATEMENT);
+            statement.executeUpdate(sql);
+            LOGGER.info(MESSAGE_CLOSE_STATEMENT);
+        }
         LOGGER.info(MESSAGE_CLOSE_CONNECTION);
         CONNECTION_POOL.returnConnection(connection);
     }
