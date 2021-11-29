@@ -22,13 +22,13 @@ public enum CarService {
 
     INSTANCE;
 
-    private static final Repository DB_SERVICE = new CarRepository();
+    private static final Repository<Car> DB_SERVICE = new CarRepository();
     private static final ConnectionPool CONNECTION_POOL = ConnectionPool.INSTANCE;
     private static final Logger LOGGER = Logger.getLogger(UserRepository.class);
 
-    public List<Entity> findAll() throws SQLException {
+    public List<Car> findAll() throws SQLException {
         Connection connection = CONNECTION_POOL.getConnection();
-        final List<Entity> cars = DB_SERVICE.findAll(connection, Car.class);
+        final List<Car> cars = DB_SERVICE.findAll();
         LOGGER.info(MESSAGE_CLOSE_CONNECTION);
         CONNECTION_POOL.returnConnection(connection);
         return cars;
@@ -36,22 +36,20 @@ public enum CarService {
 
     public void add() throws SQLException {
         final Car car = initCar();
-        Connection connection = CONNECTION_POOL.getConnection();
         String data = "(" + car.getId() + ", '" + car.getName() + "', '" + car.getColor() + "')";
-        DB_SERVICE.insert(connection, data);
+        DB_SERVICE.insert(data);
         LOGGER.info(MESSAGE_CLOSE_CONNECTION);
-        CONNECTION_POOL.returnConnection(connection);
     }
 
-    public void delete(final long userId) throws SQLException {
+    public void delete(final long id) throws SQLException {
         Connection connection = CONNECTION_POOL.getConnection();
-        DB_SERVICE.DeleteById(connection, userId, "car", "id_car");
+        DB_SERVICE.deleteById(id, "car", "id_car");
         LOGGER.info(MESSAGE_CLOSE_CONNECTION);
         CONNECTION_POOL.returnConnection(connection);
     }
 
-    public Optional<Entity> findByName(long id) throws SQLException {
-        return findAll().stream().filter(Car.class::isInstance).filter(p -> p.getId() == id).findFirst();
+    public Optional<Car> findByName(long id) throws SQLException {
+        return findAll().stream().filter(p -> p.getId() == id).findFirst();
     }
 
     private Car initCar() {

@@ -1,6 +1,5 @@
 package com.java.training.application.service;
 
-import com.java.training.application.connector.ConnectionPool;
 import com.java.training.application.dao.Repository;
 import com.java.training.application.dao.UserRepository;
 import com.java.training.application.model.Entity;
@@ -14,7 +13,6 @@ import com.java.training.application.userInput.impl.user.InputUserPhoneNumbers;
 import com.java.training.application.userInput.impl.user.InputUserRole;
 import org.apache.log4j.Logger;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -25,33 +23,24 @@ public enum UserService {
 
     INSTANCE;
     private static final Repository DB_SERVICE = new UserRepository();
-    private static final ConnectionPool CONNECTION_POOL = ConnectionPool.INSTANCE;
-    private static final Logger logger = Logger.getLogger(UserRepository.class);
+    private static final Logger LOGGER = Logger.getLogger(UserRepository.class);
 
     public List<? extends Entity> findAll() throws SQLException {
-        Connection connection = CONNECTION_POOL.getConnection();
-        final List<? extends Entity> users = DB_SERVICE.findAll(connection, User.class);
-        logger.info(MESSAGE_CLOSE_CONNECTION);
-        CONNECTION_POOL.returnConnection(connection);
+        final List<? extends Entity> users = DB_SERVICE.findAll();
+        LOGGER.info(MESSAGE_CLOSE_CONNECTION);
         return users;
     }
 
     public void add() throws SQLException {
         final User user = initUser();
-        Connection connection = CONNECTION_POOL.getConnection();
         List<String> phones = user.getMobileNumber();
-        String query = "(" + user.getId() + ", '" + user.getRole() + "', '" + user.getFirstName() + "', '"
+        String data = "(" + user.getId() + ", '" + user.getRole() + "', '" + user.getFirstName() + "', '"
                 + user.getLastName() + "', '" + user.getEmail() + "', '" + phones.get(0) + "')";
-        DB_SERVICE.insert(connection, query);
-        logger.info(MESSAGE_CLOSE_CONNECTION);
-        CONNECTION_POOL.returnConnection(connection);
+        DB_SERVICE.insert(data);
     }
 
     public void delete(final long userId) throws SQLException {
-        Connection connection = CONNECTION_POOL.getConnection();
-        DB_SERVICE.DeleteById(connection, userId, "user", "id_user");
-        logger.info(MESSAGE_CLOSE_CONNECTION);
-        CONNECTION_POOL.returnConnection(connection);
+        DB_SERVICE.deleteById(userId, "user", "id_user");
     }
 
     public Optional<? extends Entity> findByName(long id) throws SQLException {
