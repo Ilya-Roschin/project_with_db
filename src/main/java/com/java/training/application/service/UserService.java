@@ -1,6 +1,5 @@
 package com.java.training.application.service;
 
-import com.java.training.application.connector.ConnectionPool;
 import com.java.training.application.dao.Repository;
 import com.java.training.application.dao.UserRepository;
 import com.java.training.application.model.Entity;
@@ -24,11 +23,10 @@ public enum UserService {
 
     INSTANCE;
     private static final Repository DB_SERVICE = new UserRepository();
-    private static final ConnectionPool CONNECTION_POOL = ConnectionPool.INSTANCE;
     private static final Logger LOGGER = Logger.getLogger(UserRepository.class);
 
     public List<? extends Entity> findAll() throws SQLException {
-        final List<? extends Entity> users = DB_SERVICE.findAll(User.class);
+        final List<? extends Entity> users = DB_SERVICE.findAll();
         LOGGER.info(MESSAGE_CLOSE_CONNECTION);
         return users;
     }

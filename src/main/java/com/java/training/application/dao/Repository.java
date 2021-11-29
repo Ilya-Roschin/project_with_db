@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface Repository {
 
-    List<Entity> findAll(Class<? extends Entity> clazz) throws SQLException;
+    List<T> findAll() throws SQLException;
 
     void deleteById(long id, String table, String column) throws SQLException;
 

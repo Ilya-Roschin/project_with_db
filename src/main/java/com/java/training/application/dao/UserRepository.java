@@ -2,7 +2,7 @@ package com.java.training.application.dao;
 
 import com.java.training.application.connector.ConnectionPool;
 import com.java.training.application.maper.UserMapper;
-import com.java.training.application.model.Entity;
+import com.java.training.application.model.User;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
@@ -17,33 +17,31 @@ import static com.java.training.application.util.Constant.MESSAGE_CLOSE_CONNECTI
 import static com.java.training.application.util.Constant.MESSAGE_CLOSE_STATEMENT;
 import static com.java.training.application.util.Constant.MESSAGE_EXECUTING_STATEMENT;
 
-public class UserRepository implements Repository {
+public class UserRepository implements Repository<User> {
 
     private static final Logger LOGGER = Logger.getLogger(UserRepository.class);
     private static final UserMapper USER_MAPPER = new UserMapper();
     private static final ConnectionPool CONNECTION_POOL = ConnectionPool.INSTANCE;
 
     @Override
-    public List<Entity> findAll(Class<? extends Entity> clazz) throws SQLException {
+    public List<User> findAll() throws SQLException {
         Connection connection = CONNECTION_POOL.getConnection();
         LOGGER.info(MESSAGE_EXECUTING_STATEMENT);
-        List<Entity> entities;
+        List<User> users;
         try (Statement statement = connection.createStatement()) {
-
             ResultSet resultSet = statement.executeQuery("SELECT * FROM user");
-
             LOGGER.info("Retrieving data from database...");
             System.out.println("\nuser:");
-
-            entities = new ArrayList<>();
-            entities.add(USER_MAPPER.mapTableToUser(resultSet));
-
+            users = new ArrayList<>();
+            while (resultSet.next()) {
+                users.add(USER_MAPPER.mapTableToUser(resultSet));
+            }
             resultSet.close();
             LOGGER.info(MESSAGE_CLOSE_STATEMENT);
         }
         LOGGER.info(MESSAGE_CLOSE_CONNECTION);
         CONNECTION_POOL.returnConnection(connection);
-        return entities;
+        return users;
     }
 
     @Override

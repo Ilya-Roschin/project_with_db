@@ -24,26 +24,24 @@ public class CarRepository implements Repository {
     private static final ConnectionPool CONNECTION_POOL = ConnectionPool.INSTANCE;
 
     @Override
-    public List<Entity> findAll(Class<? extends Entity> clazz) throws SQLException {
+    public List<Car> findAll() throws SQLException {
         Connection connection = CONNECTION_POOL.getConnection();
         LOGGER.info(MESSAGE_EXECUTING_STATEMENT);
-        List<Entity> entities;
+        List<Car> cars;
         try (Statement statement = connection.createStatement()) {
-
             ResultSet resultSet = statement.executeQuery("SELECT * FROM car");
-
             LOGGER.info("Retrieving data from database...");
             System.out.println("\nuser:");
-
-            entities = new ArrayList<>();
-            entities.add(CAR_MAPPER.mapTableToСar(resultSet));
+            cars = new ArrayList<>();
+            while (resultSet.next()) {
+                cars.add(CAR_MAPPER.mapTableToСar(resultSet));
+            }
             resultSet.close();
-
             LOGGER.info(MESSAGE_CLOSE_STATEMENT);
         }
         LOGGER.info(MESSAGE_CLOSE_CONNECTION);
         CONNECTION_POOL.returnConnection(connection);
-        return entities;
+        return cars;
     }
 
     @Override
@@ -54,7 +52,7 @@ public class CarRepository implements Repository {
             LOGGER.info(MESSAGE_EXECUTING_STATEMENT);
             LOGGER.info("Delete car from database...");
             statement.executeUpdate(sql);
-            LOGGER.info("User " + "'" + id + "' deleted");
+            LOGGER.info("Car " + "'" + id + "' deleted");
             LOGGER.info(MESSAGE_CLOSE_STATEMENT);
         }
         LOGGER.info(MESSAGE_CLOSE_CONNECTION);
@@ -69,8 +67,31 @@ public class CarRepository implements Repository {
             LOGGER.info(MESSAGE_EXECUTING_STATEMENT);
             statement.executeUpdate(sql);
             LOGGER.info(MESSAGE_CLOSE_STATEMENT);
+            statement.close();
         }
         LOGGER.info(MESSAGE_CLOSE_CONNECTION);
         CONNECTION_POOL.returnConnection(connection);
     }
+
+//    public <T extends Entity> T returnT(T t) {
+////        PECS - producer extends consumer super
+////               read             write            only
+//        List<? extends Entity> producer = new ArrayList<>();
+//        producer.add(null);
+//        List<? super Entity> consumer = new ArrayList<>();
+//        consumer.add(new Car("", ""));
+////        -------------------------------------------------------
+//        List<?> someList = new ArrayList<>();
+//        someList.add(new Integer(5));
+//        someList.add(null);
+////        -------------------------------------------------------
+//        final Integer integer = new Integer(1);
+//        final Number number = integer;
+//        // ковариантность типов
+//
+//        List<Integer> ints = new ArrayList<>();
+//        List<? extends Number> nums = ints;
+//        // инвариантны
+//        return t;
+//    }
 }

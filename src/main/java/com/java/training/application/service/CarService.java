@@ -28,7 +28,7 @@ public enum CarService {
 
     public List<Entity> findAll() throws SQLException {
         Connection connection = CONNECTION_POOL.getConnection();
-        final List<Entity> cars = DB_SERVICE.findAll(Car.class);
+        final List<Car> cars = DB_SERVICE.findAll();
         LOGGER.info(MESSAGE_CLOSE_CONNECTION);
         CONNECTION_POOL.returnConnection(connection);
         return cars;
