@@ -22,11 +22,11 @@ public enum CarService {
 
     INSTANCE;
 
-    private static final Repository DB_SERVICE = new CarRepository();
+    private static final Repository<Car> DB_SERVICE = new CarRepository();
     private static final ConnectionPool CONNECTION_POOL = ConnectionPool.INSTANCE;
     private static final Logger LOGGER = Logger.getLogger(UserRepository.class);
 
-    public List<Entity> findAll() throws SQLException {
+    public List<Car> findAll() throws SQLException {
         Connection connection = CONNECTION_POOL.getConnection();
         final List<Car> cars = DB_SERVICE.findAll();
         LOGGER.info(MESSAGE_CLOSE_CONNECTION);
@@ -48,8 +48,8 @@ public enum CarService {
         CONNECTION_POOL.returnConnection(connection);
     }
 
-    public Optional<Entity> findByName(long id) throws SQLException {
-        return findAll().stream().filter(Car.class::isInstance).filter(p -> p.getId() == id).findFirst();
+    public Optional<Car> findByName(long id) throws SQLException {
+        return findAll().stream().filter(p -> p.getId() == id).findFirst();
     }
 
     private Car initCar() {

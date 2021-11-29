@@ -1,5 +1,6 @@
 package com.java.training.application.menu;
 
+import com.java.training.application.model.Car;
 import com.java.training.application.model.Entity;
 import com.java.training.application.reader.Reader;
 import com.java.training.application.service.CarService;
@@ -73,7 +74,7 @@ public class ServiceMenu {
     }
 
     public void findAllCars() throws SQLException {
-        final List<? extends Entity> foundCars = CAR_SERVICE.findAll();
+        final List<Car> foundCars = CAR_SERVICE.findAll();
         if (!foundCars.isEmpty()) {
             foundCars.forEach(System.out::println);
         } else {

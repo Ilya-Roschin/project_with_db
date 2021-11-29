@@ -2,9 +2,11 @@ package com.java.training.application.dao;
 
 import com.java.training.application.connector.ConnectionPool;
 import com.java.training.application.maper.CarMapper;
+import com.java.training.application.model.Car;
 import com.java.training.application.model.Entity;
 import org.apache.log4j.Logger;
 
+import java.beans.Expression;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +19,7 @@ import static com.java.training.application.util.Constant.MESSAGE_CLOSE_CONNECTI
 import static com.java.training.application.util.Constant.MESSAGE_CLOSE_STATEMENT;
 import static com.java.training.application.util.Constant.MESSAGE_EXECUTING_STATEMENT;
 
-public class CarRepository implements Repository {
+public class CarRepository implements Repository<Car> {
 
     private static final Logger LOGGER = Logger.getLogger(CarRepository.class);
     private static final CarMapper CAR_MAPPER = new CarMapper();
@@ -47,7 +49,7 @@ public class CarRepository implements Repository {
     @Override
     public void deleteById(long id, String table, String column) throws SQLException {
         Connection connection = CONNECTION_POOL.getConnection();
-        final String sql = "DELETE FROM " + table + " WHERE " + column + " = " + id;
+        final String sql = "DELETE FROM " + table + " WHERE " + "id" + " = " + id; // TODO: 28.11.2021 ref id, delete parameter table
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             LOGGER.info(MESSAGE_EXECUTING_STATEMENT);
             LOGGER.info("Delete car from database...");

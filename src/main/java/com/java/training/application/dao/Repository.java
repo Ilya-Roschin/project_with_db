@@ -5,7 +5,7 @@ import com.java.training.application.model.Entity;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface Repository {
+public interface Repository<T extends Entity> {
 
     List<T> findAll() throws SQLException;
 
